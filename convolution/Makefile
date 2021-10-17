@@ -10,6 +10,6 @@ CC = gcc
 CFLAGS = -03
 
 LDLIBS = -ljack -lsndfile -lm -lfftw3
-   
-rt_convolution: rt_convolution.c
-        ${CC} ${CFLAGS} rt_convolution.c      -o rt_convolution      ${LDLIBS}
+
+upols_convolution: upols_convolution.c
+        ${CC} ${CFLAGS} upols_convolution.c -o upols_convolution ${LDLIBS}
