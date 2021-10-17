@@ -72,15 +72,15 @@ int jack_callback (jack_nframes_t nframes, void *arg){
 			
       // reading from a single ring buffer multiple times
 			out[i][j] = in[0][j] + delay_coef[i][0]*delay_buffer[i][index0]
-					                 + delay_coef[i][1]*delay_buffer[i][index1]
-				     	             + delay_coef[i][2]*delay_buffer[i][index2];
+					     + delay_coef[i][1]*delay_buffer[i][index1]
+				     	     + delay_coef[i][2]*delay_buffer[i][index2];
 
 			// feedback stage, this enables cross feedback and creates saturation and compression
       // using the LP_min function
 			delay_buffer[i][delay_index[i]] = (0.6*LP_min(input_gain*in[0][j], 2, 1)
-							                        + fdbck_coef[i][0]*delay_buffer[i][index0]
-							                        + fdbck_coef[i][1]*delay_buffer[i][index1]
-                                      + fdbck_coef[i][2]*delay_buffer[i][index2]);
+							+ fdbck_coef[i][0]*delay_buffer[i][index0]
+							+ fdbck_coef[i][1]*delay_buffer[i][index1]
+                                                        + fdbck_coef[i][2]*delay_buffer[i][index2]);
 			
       // updates the ring buffer index
 			delay_index[i]   = (delay_index[i] + 1 )%delay_samples[i];
@@ -111,7 +111,7 @@ int main (int argc, char *argv[]) {
                 exit(0);
         } 
         
-	      int mode       = atoi(argv[1]);
+	int mode       = atoi(argv[1]);
         int delay_time = atoi(argv[2]);
         float feedback = atof(argv[3]);
         float volume   = atof(argv[4]);
@@ -226,14 +226,14 @@ int main (int argc, char *argv[]) {
         };
 
 	float head_panning[8][3] = {
-		            {1, 0, 0},
-    	       	  {0, 1, 0},
+		{1, 0, 0},
+    	       	{0, 1, 0},
        	       	{0, 0, 1},
        	       	{0, 1, 0},
        	       	{0, 1, 0},
-	 	            {0, 1, 0},
+	 	{0, 1, 0},
        	       	{0, 1, 1},
- 	       	      {0, 1, 1}
+ 	       	{0, 1, 1}
 	};
 	
 	delay_coef         = new float*[num_channels];
