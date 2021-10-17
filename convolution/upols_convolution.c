@@ -55,21 +55,21 @@ int jack_callback (jack_nframes_t nframes, void *arg){
         out = (jack_default_audio_sample_t *)jack_port_get_buffer (output_port, nframes);
 
         for (i = 0; i < nframes; i++){
-          // nframes come in and are saved in the right half of the input buffer
-		      buffer[nframes + i] = in[i];
+        	// nframes come in and are saved in the right half of the input buffer
+		buffer[nframes + i] = in[i];
           
-          // the input buffer is then copied into the fftw 3time buffer
-          i_time[i] = buffer[i];
-          i_time[nframes+i] = buffer[nframes+i];
+        	// the input buffer is then copied into the fftw 3time buffer
+        	i_time[i] = buffer[i];
+        	i_time[nframes+i] = buffer[nframes+i];
         }
   
 	// taking fftw3 to obtain frequency domain coefficients in i_fft array:
-  fftw_execute(i_forward);
+  	fftw_execute(i_forward);
 	
 	// applying a circular shift to the FDL:
 	for (i = 0; i < two_nframes; i++){
 		for (k = partitions - 1; k > 0; k--){
-			fdl[k][i] = fdl[k-1][i];
+	        	fdl[k][i] = fdl[k-1][i];
 		}
 	}
 
@@ -85,21 +85,21 @@ int jack_callback (jack_nframes_t nframes, void *arg){
 		for (k = 0; k < partitions; k++){
 			o_fft[i] += fdl[k][i] * fir[k][i];
 		}
-  }
+ 	 }
 	
 	// going back to time domain.
   fftw_execute(o_inverse);
   for (i = 0; i < nframes; i++){
-    // take second half of the ifft as the output, discard the 
-    // time-aliased first half of the ifft.
+    	// take second half of the ifft as the output, discard the 
+    	// time-aliased first half of the ifft.
     
-		out[i] = vol*creal(o_time[nframes+i])/two_nframes;
-    // shift input buffer by shifting the second half to take
-    // the first halfs' place.
-		buffer[i] = in[i];
-  }
-
-        return 0;
+	out[i] = vol*creal(o_time[nframes+i])/two_nframes;
+    	// shift input buffer by shifting the second half to take
+    	// the first halfs' place.
+	buffer[i] = in[i];
+  	}
+	
+	return 0;
 }
 
 
