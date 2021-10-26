@@ -3,7 +3,7 @@ CXX = gcc
 CPPFLAGS = -O3 -L/usr/lib64/pipewire-0.3/jack
 CXXFLAGS = -ljack -lm -lstdc++
 
-all: flanger
+all: flutter_master_flanger
 
 flanger: flanger.cpp
-	$(CXX) $(CPPFLAGS) flanger.cpp -o flanger  $(CXXFLAGS)
+	$(CXX) $(CPPFLAGS) flutter_master_flanger.cpp -o flutter_master_flanger  $(CXXFLAGS)
