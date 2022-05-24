@@ -28,20 +28,20 @@ int jack_callback (jack_nframes_t nframes, void *arg){
 		in[i] =  (jack_default_audio_sample_t*) jack_port_get_buffer ( input_port[i], nframes);
 		out[i] = (jack_default_audio_sample_t*) jack_port_get_buffer (output_port[i], nframes);
 		
-		// All pass stages:
+		// Cascaded all pass stages:
+		// i_buffer may seem useless but we can get the parallel comb filter -> cascaded all pass filter
+		// topology tweaking this slightly if we keep it here.
 		for (k = 0; k < stages; k++){
 			for (j = 0; j < nframes; j++){
 				g  = loop_gains[k];
 				g2 = 1-g*g;
 
 				o_buffer[k][i][read_index[k][i]] = i_buffer[k][i][read_index[k][i]];
-        i_buffer[k][i][read_index[k][i]] = in[i][j] + g*o_buffer[k][i][read_index[k][i]];
-				
-        out[i][j] = -g*in[i][j] + g2*o_buffer[k][i][read_index[k][i]];
-        // make the output of this stage the input of the next
+				i_buffer[k][i][read_index[k][i]] = in[i][j] + g*o_buffer[k][i][read_index[k][i]];
+				out[i][j] = -g*in[i][j] + g2*o_buffer[k][i][read_index[k][i]];
+        			// make the output of this stage the input of the next
 				in[i][j] = out[i][j];
-	
-        read_index[k][i]  = (1  + read_index[k][i])%delay_samples[k];
+				read_index[k][i]  = (1  + read_index[k][i])%delay_samples[k];
 			}
 		}
 	}
