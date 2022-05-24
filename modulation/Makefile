@@ -1,9 +1,14 @@
-CXX = gcc
-# take out the second flag if you're using native JACK
-CPPFLAGS = -O3 -L/usr/lib64/pipewire-0.3/jack
+CC       = gcc
+CFLAGS   = -L/usr/lib64/pipewire-0.3/jack  -Wall
+LDLIBS   = -ljack -lm -lfftw3
 CXXFLAGS = -ljack -lm -lstdc++
+TARGET   = fft_modulation
 
-all: flutter_master_flanger
+OBJFILE   = $(patsubst %, %.o, $(TARGET))
 
-flanger: flanger.cpp
-	$(CXX) $(CPPFLAGS) flutter_master_flanger.cpp -o flutter_master_flanger  $(CXXFLAGS)
+all: $(TARGET)
+
+$(TARGET): $(OBJFILE)
+        $(CC) $(CFLAGS) -o $(TARGET) $(OBJFILE) $(LDLIBS)
+clean:
+        rm -f *.o *~
